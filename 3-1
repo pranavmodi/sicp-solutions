@@ -1,0 +1,62 @@
+#lang scheme
+
+(define (make-accumulator amount)
+  (lambda (a)
+    (begin (set! amount (+ amount a))
+           amount)))
+    
+(define acc1 (make-accumulator 100))
+
+(define acc2 (make-accumulator 50))
+
+(define (square s)
+  (* s s))
+
+
+(define (make-monitered f)
+  (let ((no-of-calls 0))
+  (lambda (inp)
+    (cond ((eq? inp (quote how-many-calls?))
+          no-of-calls)
+          ((eq? inp (quote reset-count))
+          (set! no-of-calls 0))
+          (else (begin (set! no-of-calls (+ no-of-calls 1)) (f inp)))))))
+
+
+(define count-square (make-monitered square))
+
+
+(define (make-account balance password)
+  (let ((wrong-calls 0))
+  (define (withdraw amount)
+    (if (>= balance amount)
+        (begin (set! balance (- balance amount))
+               balance)
+        "Insufficient funds"))
+  (define (deposit amount)
+    (set! balance (+ balance amount))
+    balance)
+  (define (dispatch m pass)
+    (cond ((eq? m (quote withdraw)) (if (eq? password pass) 
+                                        (begin (set! wrong-calls 0)
+                                               withdraw)
+                                        (begin (if (> wrong-calls 7) 
+                                                   (error "calling the cops!!")
+                                                   (set! wrong-calls (+ 1 wrong-calls)))
+                                               (error "Wrong password" ))))
+          ((eq? m (quote deposit)) (if (eq? password pass)
+                                       (begin (set! wrong-calls 0)
+                                              deposit)
+                                       (begin (if (> wrong-calls 7) 
+                                                  (error "calling the cops!!")
+                                                  (set! wrong-calls (+ 1 wrong-calls)))
+                                              (error "Wrong password"))))
+          (else (error "Unknown request -- MAKE-ACCOUNT" m))))
+  dispatch))
+
+
+(define acc3 (make-account 100 (quote hithere)))
+  
+
+
+          

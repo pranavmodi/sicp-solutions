@@ -1,0 +1,21 @@
+#lang scheme
+
+(define (inc a b n)
+  (/ (- b a) n))
+
+(define (mult k n)
+  (cond ((= k 1) 1)
+        ((= k (+ n 1)) 1)
+        ((= (remainder k 2) 0) 4)
+        (else 2)))
+
+(define (cube x) (* x x x))
+
+(define (simpsons f a b n)
+  (define (simp f a b n addit k)
+    (if (> k n)
+      0
+      (+ (* (mult k n) (f (+ a addit)))
+          (simp f a b n (+ addit (inc a b n)) (+ k 1)))))
+ (* (/ (inc a b n) 3) (simp cube a b n (inc a b n) 1)))
+

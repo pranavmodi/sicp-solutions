@@ -1,0 +1,20 @@
+#lang scheme
+
+(define (accumulate combiner null-value term a next b)
+  (define (acc-iter a result)
+    (if (> a b)
+        result
+        (acc-iter (next a) (combiner result (term a)))))
+  (acc-iter a null-value))
+
+
+(define (identity a) a)
+
+(define (inc a) (+ a 1))
+
+(define (mult a b) (* a b))
+
+(define (sumit a b) (+ a b))
+
+(+ (let ((x 3))
+     (+ x (* x 10))) x)

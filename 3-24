@@ -1,0 +1,50 @@
+#lang scheme
+
+(define (assoc key records same-key?)
+  (cond ((null? records) false)
+        ((same-key? key (caar records)) (car records))
+        (else (assoc key (cdr records)))))
+
+
+(define (make-table sk?)
+  (let ((local-table (list (quote *table*))))
+    (define (lookup key-1 key-2)
+      (let ((subtable (assoc key-1 (mcdr local-table) sk?)))
+        (if subtable
+            (let ((record (assoc key-2 (mcdr subtable) sk?)))
+              (if record
+                  (mcdr record)
+                  false))
+            false)))
+    (define (insert! key-1 key-2 value)
+      (let ((subtable (assoc key-1 (mcdr local-table) sk?)))
+        (if subtable
+            (let ((record (assoc key-2 (mcdr subtable) sk?)))
+              (if record
+                  (set-mcdr! record value)
+                  (set-mcdr! subtable
+                            (mcons (mcons key-2 value)
+                                  (mcdr subtable)))))
+            (set-mcdr! local-table
+                      (mcons (list key-1
+                                  (mcons key-2 value))
+                            (mcdr local-table)))))
+      (quote ok))
+    (define (dispatch m)
+  (cond ((eq? m (quote lookup-proc)) lookup)
+        ((eq? m (quote insert-proc!)) insert!)
+        (else (error "Unknown operation -- TABLE" m))))
+dispatch))
+
+
+
+(define (memoize f)
+  (let ((table (make-table)))
+    (lambda (x)
+      (let ((previously-computed-result (lookup x table)))
+        (or previously-computed-result
+            (let ((result (f x)))
+              (insert! x result table)
+              result))))))
+
+

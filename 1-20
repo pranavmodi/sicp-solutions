@@ -1,0 +1,22 @@
+#lang scheme
+
+
+(define (even? n)
+  (= (remainder n 2) 0))
+
+(define (double x) (+ x x)) 
+(define (halve x) (/ x 2)) 
+ 
+(define (* x a)
+ (cond ((= a 0) 0)
+       ((even? a) (* (+ x x) (/ a 2)))
+       (else (+ x (* x (- a 1))))))
+        
+
+(define (new* x a)
+  (iter* 0 x a))
+
+(define (iter* s x a)
+ (cond ((= a 0) s)
+       ((even? a) (iter* s (double x) (halve a)))
+       (else (iter* (+ s x) x (- a 1)))))

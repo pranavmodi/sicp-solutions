@@ -1,0 +1,26 @@
+#lang scheme
+
+(define (product term a next b)
+  (define (prod-iter a result)
+    (if (> a b)
+       result
+       (prod-iter (next a) (* result (term a)))))
+   (prod-iter a 1))
+
+(define (identity a) a)
+
+(define (inc a) (+ a 1))
+
+(define (somep a) (/ (* a (+ a 2)) (* (+ a 1) (+ a 1))))
+(define (inc2 a) (+ a 2))
+
+(define (search f neg-point pos-point)
+  (let ((midpoint (average neg-point pos-point)))
+    (if (close-enough? neg-point pos-point)
+        midpoint
+        (let ((test-value (f midpoint)))
+          (cond ((positive? test-value)
+                 (search f neg-point midpoint))
+                ((negative? test-value)
+                 (search f midpoint pos-point))
+                (else midpoint))))))

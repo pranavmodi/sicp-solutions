@@ -1,0 +1,54 @@
+#lang scheme
+
+(define (same-parity first . rest) 
+   (define (congruent-to-first-mod-2? a) 
+     (= (remainder a 2) (remainder first 2))) 
+  
+   (define (select-same-parity items) 
+     (if (null? items)  
+         items 
+         (let ((curr (car items)) 
+               (select-rest (select-same-parity (cdr items)))) 
+           (if (congruent-to-first-mod-2? curr) 
+               (cons curr select-rest) 
+               select-rest)))) 
+  
+   (cons first (select-same-parity rest))) 
+
+(define nil '())
+
+ (define (for-each proc items) 
+   (cond ((not (null? items)) 
+          (proc (car items)) 
+          (for-each proc (cdr items))))) 
+
+ 
+(define (reverse a)
+  (define (iter l result)
+    (if (null? l)
+        result
+        (iter (cdr l) (cons (car l) result))))
+  (iter a nil))
+    
+ 
+ 
+
+(define t (list 3 5 6 7 8 9 5 4))
+(define x (list 1 2 3))
+(define y (list 4 5 6))
+(define comb (list x y)) 
+
+(define (deep-reverse a)
+  (define (iter l result)
+    (cond ((null? l) result)
+          ((pair? (car a)) (iter (cdr l) (cons (deep-reverse(car l)) result)))
+          (else (iter (cdr l) (cons (car l) result)))))
+  (iter a nil))
+    
+(define xi (list (list 1 2) (list 3 4)))
+
+
+(define (fringe t)
+  (cond ((null? t) nil)
+        ((pair? (car t)) (append (fringe (car t)) (fringe (cdr t))))
+        (else (append (car t) fringe (cdr t)))))

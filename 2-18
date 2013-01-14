@@ -1,0 +1,31 @@
+#lang scheme
+
+(define a (list 1 3 4 5 8))
+
+(define b (list 1 2))
+(define c (list 1 2))
+
+(define (length items)
+  (define (length-iter a count)
+    (if (null? a)
+        count
+        (length-iter (cdr a) (+ 1 count))))
+  (length-iter items 0))
+
+
+(define (append list1 list2)
+  (if (null? list1)
+      list2
+      (cons (car list1) (append (cdr list1) list2))))
+
+
+(define (last-pair a)
+  (if (null? (cdr a))
+      (car a)
+      (last-pair (cdr a))))
+
+(define (reverse a)
+  (if (null? (cdr (cdr a)))
+      (list (car (cdr a)) (car a))
+      (append (reverse (cdr a)) (car a)))) 
+

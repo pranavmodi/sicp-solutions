@@ -1,0 +1,47 @@
+#lang scheme
+
+(define (fn n)
+(cond ((< n 3) n)
+      (else (+ (fn (- n 1)) (* 2 (fn (- n 2))) (* 3 (fn (- n 3)))))))
+
+
+
+
+(define (fn2 n)
+  (fn2-iter n 2 1 0))
+
+(define (fn2-iter n a b c)  
+ (if (< n 3) n
+     (fn2-iter (- n 1) (+ a (* 2 b) (* 3 c)) a b)))
+
+
+ (define (f n) 
+   (define (iter a b c count) 
+     (if (= count 2) 
+       c 
+       (iter b c (+ c (* 2 b) (* 3 a)) (- count 1)))) 
+   (iter 0 1 2 n))
+ 
+(define (pascal n)
+  (if (or isitone(n) (= n 1)) 1
+      (+ pascal (- n giveline(n)) pascal(+ (- n giveline(n)) 1)))
+  (define (isitone)
+    (
+     
+(define (square n)
+  (* n n))
+     
+(define (even? n)
+  (= (remainder n 2) 0))
+
+(define (fastexp b n)
+  (if (
+  
+ 
+(define (fast-iter b n)
+  (cond (= n 0) 1 
+        (even? n) fast-iter (square b) (/ n 2)
+        (* b (fast-iter b (- n 1)))))   
+ 
+
+    
